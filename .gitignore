@@ -1,0 +1,15 @@
+/**/*.pyc
+/**/__pycache__
+p3
+/**/*.egg-info
+.tox
+_test-tmp
+
+*.swp
+*.swc
+
+/**/_build
+/**/_deps
+
+polys/*
+

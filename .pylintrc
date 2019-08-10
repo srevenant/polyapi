@@ -1,0 +1,19 @@
+[MESSAGES CONTROL]
+disable=fixme,W0511
+
+
+#disable=trailing-newlines,bad-option-value
+
+#[BASIC]
+#bad-functions=[map,filter]
+
+[TYPECHECK]
+ignored-modules = ujson
+ignored-classes = dictlib.Obj
+
+#[MISCELLANEOUS]
+
+# List of note tags to take in consideration, separated by a comma.
+#notes=
+#FIXME,XXX,TODO
+
