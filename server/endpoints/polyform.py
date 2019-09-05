@@ -6,7 +6,7 @@ import os
 import sys
 import re
 import importlib
-import ujson as json
+import json
 import cherrypy
 from dictlib import Dict
 from .. import exceptions
@@ -55,12 +55,15 @@ def initialize():
 
         POLYS[poly.name] = Dict(conf=pconf, mod=mod, path=bpath, run=modexp[-1])
 
-
 initialize()
 
 # TODO: actually key this off of the config polyform.forms[form].run
 class Handler(Endpoint, Rest):
     """docstring"""
+
+    def rest_read(self, facet_path, *_args, **_kwargs):
+        """read"""
+        raise ValueError("HTTP GET is not a supported method")
 
     def rest_create(self, facet_path, *_args, **_kwargs):
         """call a polyform"""
@@ -68,6 +71,7 @@ class Handler(Endpoint, Rest):
 
         facet = POLYS.get(facet_path)
         if not facet:
+            print("Cannot find polyform facet: {}, polyform: {}".format(facet_path, POLYS))
             raise exceptions.InvalidParameter("Cannot find polyform facet: {}".format(facet_path))
 
         os.chdir(facet.path)
@@ -76,4 +80,6 @@ class Handler(Endpoint, Rest):
             dict(headers={}, parsed_body=cherrypy.request.json),
             {}
         )
+        if not result.get('status'):
+            result['status'] = "success"
         return result

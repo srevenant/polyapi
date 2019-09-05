@@ -13,6 +13,7 @@ import sys
 import time
 import logging
 import logging.config
+import datetime
 import traceback
 import cherrypy._cplogging
 from . import SERVER
@@ -160,6 +161,7 @@ def log(*args, **kwargs):
     x>> log(test="this is a test", x='this') # doctest: +ELLIPSIS
     - - [...] test='this is a test' x=this
     """
+    args = (datetime.datetime.now().replace(microsecond=0).isoformat(),) + args
     try:
         if SERVER:
             try:

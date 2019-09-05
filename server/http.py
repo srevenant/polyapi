@@ -11,7 +11,7 @@ import time
 import traceback
 import random
 import cherrypy
-
+import polyform
 from . import exceptions
 from .util import json4store
 from .logger import set_DEBUG, log
@@ -84,7 +84,10 @@ class Rest():
             cherrypy.response.status = 401
             return {"status": "failed", "message": "Unauthorized"}
 
-        except (ValueError, exceptions.InvalidParameter, exceptions.ServerError) as err:
+        except (ValueError,
+                exceptions.InvalidParameter,
+                exceptions.ServerError,
+                polyform.gql.validate.DataValidationError) as err:
             status = {"status": "failed"}
             cherrypy.response.status = 400
             if type(err) in (list, tuple, exceptions.ServerError): # pylint: disable=unidiomatic-typecheck

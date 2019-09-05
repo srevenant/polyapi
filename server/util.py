@@ -27,8 +27,8 @@ plus basic REST handlers.
 
 import base64
 import re
+import json
 import cherrypy
-import ujson as json
 from . import exceptions
 
 ################################################################################
@@ -67,11 +67,11 @@ def get_jti(in_jwt):
 ################################################################
 def json4human(data):
     """Json output for humans"""
-    return json.dumps(data, escape_forward_slashes=False, indent=2, sort_keys=True)
+    return json.dumps(data, indent=2, sort_keys=True)
 
 def json4store(data, **kwargs):
     """Json output for storage"""
-    return json.dumps(data, escape_forward_slashes=False, **kwargs)
+    return json.dumps(data, **kwargs)
 
 def json2data(string):
     """json to its python representation"""

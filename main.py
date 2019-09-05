@@ -11,6 +11,7 @@ General Webhooks and simple API routing
 import os
 import sys
 import time
+#import importlib
 import base64
 import logging
 import logging.config
@@ -59,14 +60,14 @@ class Server():
 
         print(__file__)
         ## Eventually make this read from __file__ or other globals to get plugin path
-#        for fname in os.listdir('endpoints'):
-#            if not os.path.isfile(os.path.join('endpoints', fname)):
-#                continue
-#            if not re.search(r'^[a-z0-9]+.py$', fname):
-#                print("skip " + fname)
-#                continue
-#            endpoint = re.sub(r'\.py$', '', fname)
-#            self.endpoint_names.append(endpoint)
+        # for fname in os.listdir('endpoints'):
+        #    if not os.path.isfile(os.path.join('endpoints', fname)):
+        #        continue
+        #    if not re.search(r'^[a-z0-9]+.py$', fname):
+        #        print("skip " + fname)
+        #        continue
+        #    endpoint = re.sub(r'\.py$', '', fname)
+        #    self.endpoint_names.append(endpoint)
 
     def monitor(self):
         """
@@ -114,6 +115,7 @@ class Server():
     def add_endpoint(self, endpoint, mod):
         """add an endpoint as a pluggable module"""
         # pylint: disable=no-member
+#        mod = importlib.import_module('endpoints.' + endpoint, package='.') # , package=__name__)
         route = self.conf.server.route_base + "/" + mod.__name__.split(".")[-1]
         print("route=" + route)
         handler = mod.Handler(server=self, route=route)
@@ -168,6 +170,7 @@ class Server():
             }
         })
 
+        # lots of legacy stuff here which isn't used
         defaults = {
             'deploy_ver': 0, # usable for deployment tools
             'server': {
@@ -184,18 +187,6 @@ class Server():
                 'policies': 300,
                 'sessions': 300,
                 'groups': 300
-            },
-            'crypto': {
-# pylint: disable=bad-continuation
-#                '000': {
-# dd if=/dev...
-#                    'key': "",
-#                    'default': True,
-#                }
-            },
-            'db': {
-                'database': 'reflex_engine',
-                'user': 'root'
             },
             'auth': {
                 'expires': 300
@@ -252,11 +243,14 @@ class Server():
         cherrypy.config.update({'engine.autoreload.on': False})
         self.conf = conf
 
-        # eventually
+        sys.path.append('.')
+
+#        # eventually
 #        for mod in self.endpoint_names:
 #            self.add_endpoint(mod)
 
         # hack for now
+#        from . import polyform as polyform
         from server.endpoints import polyform
         self.add_endpoint('polyform', polyform)
 

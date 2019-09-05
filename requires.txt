@@ -1,4 +1,8 @@
+dictlib
 cherrypy
 setproctitle
 timeinterval
-ujson
+# and for the embedded polyforms:
+datacleaner
+pandas
+xgboost
